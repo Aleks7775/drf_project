@@ -19,11 +19,11 @@ class CourseViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         """Проверка на модератора и пользователя"""
         if self.action == 'create':
-            self.permission_classes = (~IsModer,) # инверсия (пользователь должен быть не модератор)
-        elif self.action in ['update', 'retrieve']:
-            self.permission_classes = (IsModer | IsOwner,)
+            self.permission_classes = (IsAuthenticated, ~IsModer,) # инверсия (пользователь должен быть не модератор)
+        elif self.action in ['update', 'partial_update', 'retrieve']:
+            self.permission_classes = (IsAuthenticated, IsModer | IsOwner,)
         elif self.action == "destroy":
-            self.permission_classes = (~IsModer | IsOwner,)
+            self.permission_classes = (IsAuthenticated, IsOwner,)
         return super().get_permissions()
 
 
@@ -40,7 +40,14 @@ class LessonCreateAPIView(generics.CreateAPIView):
 
 class LessonListAPIView(generics.ListAPIView):
     serializer_class = LessonSerializer
-    queryset = Lesson.objects.all()
+    # queryset = Lesson.objects.all()
+
+    def get_queryset(self):
+        """Проверяем, есть ли у пользователя права модератора, если пользователь не модератор, показываем только его уроки"""
+        is_moderator = IsModer()
+        if is_moderator.has_permission(self.request, self):
+            return Lesson.objects.all()
+        return Lesson.objects.filter(owner=self.request.user)
 
 
 class LessonRetrieveAPIView(generics.RetrieveAPIView):
