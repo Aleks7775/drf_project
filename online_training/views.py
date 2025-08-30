@@ -26,6 +26,13 @@ class CourseViewSet(viewsets.ModelViewSet):
             self.permission_classes = (IsAuthenticated, IsOwner,)
         return super().get_permissions()
 
+    def get_queryset(self):
+        """Проверяем, есть ли у пользователя права модератора, если пользователь не модератор, показываем только его курсы"""
+        is_moderator = IsModer()
+        if is_moderator.has_permission(self.request, self):
+            return Course.objects.all()
+        return Course.objects.filter(owner=self.request.user)
+
 
 class LessonCreateAPIView(generics.CreateAPIView):
     serializer_class = LessonSerializer
