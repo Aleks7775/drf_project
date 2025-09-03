@@ -2,6 +2,7 @@ from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAuthenticated
 
 from online_training.models import Course, Lesson
+from online_training.paginators import CustomPagination
 from online_training.serliazers import CourseSerializer, LessonSerializer
 from users.permissions import IsModer, IsOwner
 
@@ -9,6 +10,7 @@ from users.permissions import IsModer, IsOwner
 class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
+    pagination_class = CustomPagination
 
     def perform_create(self, serializer):
         """Присваивания курса к пользователю"""
@@ -47,6 +49,7 @@ class LessonCreateAPIView(generics.CreateAPIView):
 
 class LessonListAPIView(generics.ListAPIView):
     serializer_class = LessonSerializer
+    pagination_class = CustomPagination
     # queryset = Lesson.objects.all()
 
     def get_queryset(self):
