@@ -8,6 +8,7 @@ from users.permissions import IsModer, IsOwner
 
 
 class CourseViewSet(viewsets.ModelViewSet):
+    """ Viewset for course"""
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
     pagination_class = CustomPagination
@@ -37,6 +38,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
+    """ Lesson create endpoint """
     serializer_class = LessonSerializer
     permission_classes = (~IsModer, IsAuthenticated) # нет прав у не авторизованного пользователя, не модератор
 
@@ -48,6 +50,7 @@ class LessonCreateAPIView(generics.CreateAPIView):
 
 
 class LessonListAPIView(generics.ListAPIView):
+    """ Lesson list endpoint """
     serializer_class = LessonSerializer
     pagination_class = CustomPagination
     # queryset = Lesson.objects.all()
@@ -61,17 +64,20 @@ class LessonListAPIView(generics.ListAPIView):
 
 
 class LessonRetrieveAPIView(generics.RetrieveAPIView):
+    """ Lesson create endpoint """
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
     permission_classes = (IsAuthenticated, IsModer | IsOwner)  # либо модератор либо владелец
 
 
 class LessonUpdateAPIView(generics.UpdateAPIView):
+    """ Lesson update endpoint """
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
     permission_classes = (IsAuthenticated, IsModer | IsOwner)
 
 
 class LessonDestroyAPIView(generics.DestroyAPIView):
+    """ Lesson delete endpoint """
     queryset = Lesson.objects.all()
     permission_classes = (IsAuthenticated, IsOwner)  # авторизован и владелец
