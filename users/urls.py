@@ -3,7 +3,7 @@ from rest_framework.permissions import AllowAny
 from users.apps import UsersConfig
 from django.urls import path
 from users.views import (PaymentViewSet, UserCreateAPIView, UserListAPIView,
-                         UserUpdateAPIView, UserDestroyAPIView, FollowersView)
+                         UserUpdateAPIView, UserDestroyAPIView, FollowersView, DonationCreateAPIView)
 from rest_framework.routers import SimpleRouter
 from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshView,)
 
@@ -20,6 +20,7 @@ urlpatterns = [
     path('user/', UserListAPIView.as_view(), name='user-list'),
     path('user/update/<int:pk>/', UserUpdateAPIView.as_view(), name='user-update'),
     path('user/delete/<int:pk>/', UserDestroyAPIView.as_view(), name='user-delete'),
-    path('follower/', FollowersView.as_view(), name="followers-view")
+    path('follower/', FollowersView.as_view(), name="followers-view"),
+    path("donations/", DonationCreateAPIView.as_view(), name="donations")
 ]
 urlpatterns += router.urls

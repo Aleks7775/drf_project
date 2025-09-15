@@ -53,3 +53,19 @@ class Followers(models.Model):
     class Meta:
         verbose_name = "Подписка"
         verbose_name_plural = "Подписки"
+
+
+class Donation(models.Model):
+    amount = models.PositiveIntegerField(verbose_name="Сумма оплаты", help_text="Укажите сумму платежа")
+    session_id = models.CharField(max_length=255, verbose_name="Id сессии", null=True, blank=True)
+    link = models.URLField(max_length=400, verbose_name="Ccылка на оплату", null=True, blank=True)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, verbose_name="Пользователь", null=True, blank=True
+    )
+
+    class Meta:
+        verbose_name = "Платеж"
+        verbose_name_plural = "Платежи"
+
+    def __str__(self):
+        return self.amount
