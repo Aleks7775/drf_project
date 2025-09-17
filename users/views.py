@@ -6,6 +6,8 @@ from rest_framework.generics import (CreateAPIView, ListAPIView, UpdateAPIView,
                                      DestroyAPIView, get_object_or_404)
 from rest_framework import status
 from rest_framework.response import Response
+
+from online_training.tasks import send_information
 from users.models import Payment, User, Followers, Donation
 from online_training.models import Course
 from users.permissions import IsOwner
@@ -88,26 +90,3 @@ class DonationCreateAPIView(CreateAPIView):
         donation.stripe_session_id = session_id
         donation.link = session_url
         donation.save()
-
-
-
-
-        # course = Course.objects.get(pk=int(self.request.data.get('course')))
-        # payment = serializer.save(user=self.request.user)
-        # product = create_stripe_product(course)
-        # price = create_stripe_price(payment, product)
-        # session_id, payment_link = create_stripe_session(price)
-        # payment.session_id = session_id
-        # payment.link = payment_link
-        # payment.save()
-
-        # course = Course.objects.get(pk=int(self.request.data.get('course')))
-        # payment = serializer.save(user=self.request.user)
-        # amount_in_dollars = convert_rub_to_usd(payment.amount)
-        # product = create_stripe_product(course)
-        # price = create_stripe_price(amount_in_dollars, product)
-        # session_id, payment_link = create_stripe_session(price)
-        # payment.session_id = session_id
-        # payment.link = payment_link
-        # payment.save()
-
