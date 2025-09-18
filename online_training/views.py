@@ -1,10 +1,14 @@
+from rest_framework.response import Response
 from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAuthenticated
 
 from online_training.models import Course, Lesson
 from online_training.paginators import CustomPagination
 from online_training.serliazers import CourseSerializer, LessonSerializer
+from users.models import Followers
 from users.permissions import IsModer, IsOwner
+from online_training.tasks import send_information
+from rest_framework.generics import get_object_or_404
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -35,6 +39,20 @@ class CourseViewSet(viewsets.ModelViewSet):
         if is_moderator.has_permission(self.request, self):
             return Course.objects.all()
         return Course.objects.filter(owner=self.request.user)
+
+    def update(self, request, *args, **kwargs):
+        """Функция для проверки и отправки рассылки пользователям которые подписаны на курс"""
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        subs_item = Followers.objects.filter(courses=instance)
+
+        for follower in subs_item:
+            send_information.delay(follower.user.email)
+
+        return Response(serializer.data)
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
