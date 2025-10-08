@@ -1,0 +1,74 @@
+version: '3,9'
+
+services:
+  web:
+    build: .
+    command: python3 manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+      - static_volume:/code/static
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $POSTGRES_USER" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    env_file:
+      - ./.env
+    volumes:
+      - redis_data:/data
+
+  celery:
+    build:
+      context: .
+    container_name: celery_worker
+    command:
+      celery -A config worker -l INFO
+    env_file:
+      - ./.env
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+
+  celery_beat:
+    build:
+      context: .
+    container_name: celery_beat
+    command:
+      celery -A config beat --loglevel=INFO
+    env_file:
+      - ./.env
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+      - celery
+
+networks:
+  default:
+
+volumes:
+  postgres_data:
+  redis_data:
+  static_volume:
+
