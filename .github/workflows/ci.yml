@@ -1,4 +1,4 @@
-name: Django CI
+name: drf_project
 
 on: [ push ]
 

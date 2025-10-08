@@ -4,9 +4,9 @@ version = "0.1.0"
 description = ""
 authors = ["Aleksandr <feat9999@yandex.ru>"]
 readme = "README.md"
-packages = [
-  { include = "drf_project" }
-]
+#packages = [
+#  { include = "drf_project" }
+#]
 
 [tool.poetry.dependencies]
 python = "^3.12"
