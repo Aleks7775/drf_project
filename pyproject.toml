@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "drf-project"
+name = "drf_project"
 version = "0.1.0"
 description = ""
 authors = ["Aleksandr <feat9999@yandex.ru>"]
