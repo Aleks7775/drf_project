@@ -52,12 +52,12 @@ jobs:
 
       - name: Sync project to server
         run: |
-          rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./ ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/home/alex/myapp
+          rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./ ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/home/alex/
 
       - name: Deploy to server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-          cd /home/alex/myapp
+          cd /home/alex/
             git pull origin main
             python manage.py migrate
             poetry install
