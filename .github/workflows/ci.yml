@@ -64,3 +64,4 @@ jobs:
             python manage.py collectstatic --noinput
             sudo systemctl restart your_app_service
           EOF
+
