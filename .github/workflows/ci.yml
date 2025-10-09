@@ -52,7 +52,7 @@ jobs:
 
       - name: Sync project to server
         run: |
-          rsync -avz --delete ./ ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/home/alex/myapp
+          rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./ ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/home/alex/myapp
 
       - name: Deploy to server
         run: |
