@@ -59,9 +59,10 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
           cd /home/alex/myapp
             git pull origin main
+            python3 -m venv venv
             source venv/bin/activate
-            pip install -r requirements.txt
             python manage.py migrate
+            poetry install
             python manage.py collectstatic --noinput
             sudo systemctl restart your_app_service
           EOF
