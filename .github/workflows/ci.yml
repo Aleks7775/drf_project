@@ -52,15 +52,13 @@ jobs:
 
       - name: Sync project to server
         run: |
-          rsync -avz --delete --exclude-from='.rsyncignore' ./ ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/home/alex/myapp
+          rsync -avz --delete ./ ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/home/alex/myapp
 
       - name: Deploy to server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
           cd /home/alex/myapp
             git pull origin main
-            python3 -m venv venv
-            source venv/bin/activate
             python manage.py migrate
             poetry install
             python manage.py collectstatic --noinput
