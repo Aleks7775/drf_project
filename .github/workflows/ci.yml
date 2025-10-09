@@ -50,10 +50,14 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_KEY }}
 
+      - name: Sync project to server
+        run: |
+          rsync -avz --delete --exclude-from='.rsyncignore' ./ ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/home/alex/myapp
+
       - name: Deploy to server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-          cd /path/to/your/app
+          cd /home/alex/myapp
             git pull origin main
             source venv/bin/activate
             pip install -r requirements.txt
