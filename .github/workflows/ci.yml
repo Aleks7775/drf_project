@@ -36,11 +36,11 @@ jobs:
     needs: test
     env:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      POSTGRES_DB: ${{ secrets.DATABASE_NAME }}
-      POSTGRES_USER: ${{ secrets.DATABASE_USER }}
-      POSTGRES_PASSWORD: ${{ secrets.PASSWORD }}
-      POSTGRES_HOST: ${{ secrets.HOST }}
-      POSTGRES_PORT: ${{ secrets.PORT }}
+      DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+      DATABASE_USER: ${{ secrets.DATABASE_USER }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+      HOST: ${{ secrets.HOST }}
+      PORT: ${{ secrets.PORT }}
 
     steps:
       - name: Set up SSH
