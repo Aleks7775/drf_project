@@ -56,8 +56,10 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
           cd ${{ secrets.DEPLOY_DIR }}
-          git fetch --prune
-          git reset --hard origin/ci_cd
+          git pull origin main
+          poetry install
+          python manage.py collectstatic --noinput
+          sudo systemctl restart your_app_service
         EOF
 
 #    steps:
