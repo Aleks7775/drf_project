@@ -45,35 +45,23 @@ jobs:
       PORT: ${{ secrets.PORT }}
 
     steps:
-      - name: Deploy to server
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+
+      - name: Sync project to server
+        run: |
+          sudo rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./ ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/home/alex/
+
+      - name: Deploy to server # Шаг развертывания на сервер
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd ~/home
-            git pull 
+            cd ~/home/alex/
+            git pull
             docker compose down
             docker-compose up -d
-
-#      - name: Set up SSH
-#        uses: webfactory/ssh-agent@v0.9.0
-#        with:
-#          ssh-private-key: ${{ secrets.SSH_KEY }}
-#
-#      - name: Sync project to server
-#        run: |
-#          sudo rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./ ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/home/alex/
-#
-#      - name: Deploy to server
-#        run: |
-#          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-#          cd /home/alex/
-#            git pull origin main
-#            python manage.py migrate
-#            poetry install
-#            python manage.py collectstatic --noinput
-#            sudo systemctl restart your_app_service
-#          EOF
-
