@@ -50,10 +50,6 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_KEY }}
 
-      - name: Sync project to server
-        run: |
-          sudo rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./ ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:/home/alex/
-
       - name: Deploy to server # Шаг развертывания на сервер
         uses: appleboy/ssh-action@master
         with:
