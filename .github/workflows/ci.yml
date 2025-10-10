@@ -54,12 +54,12 @@ jobs:
         ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
     - name: Copy project files to server
       run: |
-        sudo rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
           cd ${{ secrets.DEPLOY_DIR }}
           git pull origin main
           poetry install
           python manage.py collectstatic --noinput
-#          sudo systemctl restart your_app_service
+          sudo systemctl restart your_app_service
         EOF
 
 #    steps:
