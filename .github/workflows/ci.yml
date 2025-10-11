@@ -62,7 +62,6 @@ jobs:
           git pull 
           poetry install
           python3 manage.py collectstatic --noinput
-#          sudo systemctl restart your_app_service
         EOF
 
 #    steps:
