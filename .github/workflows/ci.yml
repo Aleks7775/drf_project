@@ -61,8 +61,8 @@ jobs:
           cd ${{ secrets.DEPLOY_DIR }}
           git pull 
           poetry install
-          python manage.py collectstatic --noinput
-          sudo systemctl restart your_app_service
+          python3 manage.py collectstatic --noinput
+#          sudo systemctl restart your_app_service
         EOF
 
 #    steps:
