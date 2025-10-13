@@ -50,7 +50,7 @@ jobs:
       - name: Install dependencies on server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-          cd ${{ secrets.DEPLOY_DIR }}
+          cd ~/home/alex/myapp/drf_project/drf_project
           git checkout feature/homework_35_2
           sudo apt install curl
           curl -sSL https://install.python-poetry.org | python3 -
