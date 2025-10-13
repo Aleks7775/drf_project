@@ -48,8 +48,6 @@ jobs:
           ssh -o StrictHostKeyChecking=no -vT ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
           sudo apt-get update
           sudo apt-get install -y python3-venv python3-pip
-          sudo apt update
-          sudo apt upgrade
           EOF
       - name: Install dependencies on server
         run: |
