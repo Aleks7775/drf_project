@@ -50,11 +50,12 @@ jobs:
           EOF
       - name: Install dependencies on server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}
-          cd /home/alex/myapp/drf_project/drf_project
-          git pull
-          docker-compose down
-          docker-compose up -d --build 
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+            cd /home/alex/myapp/drf_project/drf_project
+            git pull
+            docker-compose down
+            docker-compose up -d --build 
+          EOF
 
 #      - name: Sync project to server
 #        run: |
