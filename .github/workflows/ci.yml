@@ -55,10 +55,6 @@ jobs:
           git pull
           docker-compose down
           docker-compose up -d --build
-#          git checkout feature/homework_35_2
-#          sudo apt install curl
-#          curl -sSL https://install.python-poetry.org | python3 -
-#          poetry install
           EOF   
 
 #      - name: Sync project to server
