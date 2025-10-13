@@ -57,6 +57,7 @@ jobs:
           poetry install --no-root
           EOF
 
+
 #      - name: Sync project to server
 #        run: |
 #          ssh -o StrictHostKeyChecking=no -vT ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
