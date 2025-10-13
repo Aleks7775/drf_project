@@ -51,6 +51,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
           cd ~/home/alex/myapp/drf_project/drf_project
+          git pull
           git checkout feature/homework_35_2
           sudo apt install curl
           curl -sSL https://install.python-poetry.org | python3 -
