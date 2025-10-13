@@ -38,45 +38,28 @@ jobs:
     needs: test
     steps:
     - name: Set up SSH
-      uses: webfactory/ssh-agent@v0.5.4
+      uses: webfactory/ssh-agent@v0.9.0
       with:
         ssh-private-key: ${{ secrets.SSH_KEY }}
+
     - name: Add server to known_hosts
       run: |
-          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+        ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
     - name: Copy project files to server
       run: |
-       ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-         cd ${{ secrets.DEPLOY_DIR }}
-         git fetch --prune
-         git reset --hard origin/ci_cd
-       EOF
-#  deploy:
-#    runs-on: ubuntu-latest
-#    needs: test
-#    steps:
-#    - name: Set up SSH
-#      uses: webfactory/ssh-agent@v0.9.0
-#      with:
-#        ssh-private-key: ${{ secrets.SSH_KEY }}
-#
-#    - name: Add server to known_hosts
-#      run: |
-#        ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
-#
-#    - name: Copy project files to server
-#      run: |
-#        rsync -avz --exclude '__pycache__' . ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-#          cd ${{ secrets.DEPLOY_DIR }}
-#          git fetch --prune
-#        EOF
-#
-#    - name: Install dependencies on server
-#      run: |
-#        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-#          cd ${{ secrets.DEPLOY_DIR }}
-#          poetry install
-#        EOF
+        rsync -avz --exclude '__pycache__' . ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          cd ${{ secrets.DEPLOY_DIR }}
+          git fetch --prune
+        EOF
+
+    - name: Install dependencies on server
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          cd ${{ secrets.DEPLOY_DIR }}
+          curl -sSL https://install.python-poetry.org | python3 -
+          poetry install
+        EOF    
 
 
 #  deploy:
