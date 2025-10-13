@@ -48,13 +48,13 @@ jobs:
           ssh -o StrictHostKeyChecking=no -vT ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
           sudo apt-get update
           sudo apt-get install -y python3-venv python3-pip
+          sudo apt update
+          sudo apt upgrade
           EOF
       - name: Install dependencies on server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
           cd ${{ secrets.DEPLOY_DIR }}
-          sudo apt update
-          sudo apt upgrade
           sudo apt install curl
           curl -sSL https://install.python-poetry.org | python3 -
           poetry config virtualenvs.create true
