@@ -39,7 +39,15 @@ jobs:
           poetry config virtualenvs.create false
           poetry install --no-root
       - name: Run tests
-        run: python manage.py test
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+          DATABASE_USER: ${{ secrets.DATABASE_USER }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          HOST: ${{ secrets.HOST }}
+          PORT: ${{ secrets.PORT }}
+          run: |
+            python manage.py test
 
   deploy:
     runs-on: ubuntu-latest
