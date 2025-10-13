@@ -53,6 +53,8 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
           cd ${{ secrets.DEPLOY_DIR }}
+          sudo apt update
+          sudo apt upgrade
           sudo apt install curl
           curl -sSL https://install.python-poetry.org | python3 -
           poetry config virtualenvs.create true
