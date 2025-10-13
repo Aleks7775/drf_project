@@ -23,6 +23,7 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -30,7 +31,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.13"
+          python-version: '3.12'
 
       - name: Install dependencies
         run: |
@@ -46,8 +47,8 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD }}
           HOST: ${{ secrets.HOST }}
           PORT: ${{ secrets.PORT }}
-          run: |
-            python manage.py test
+        run: |
+          python manage.py test
 
   deploy:
     runs-on: ubuntu-latest
