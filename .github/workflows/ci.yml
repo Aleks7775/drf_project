@@ -48,7 +48,16 @@ jobs:
 
     - name: Copy project files to server
       run: |
-        rsync -avz --exclude '__pycache__' . ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_DIR }}
+        rsync -avz --exclude '__pycache__' . ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_DIR }} << 'EOF'
+          git fetch --prune
+        EOF
+
+    - name: Install dependencies on server
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          cd ${{ secrets.DEPLOY_DIR }}
+          poetry install
+        EOF    
 
 
 #  deploy:
@@ -77,12 +86,12 @@ jobs:
 #        rsync -avz --delete --exclude='.git' ./ ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_DIR }}
 #        sudo apt-get update
 #        sudo apt-get upgrade
-    - name: Install dependencies on server
-      run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-          cd ${{ secrets.DEPLOY_DIR }}
-          poetry install
-        EOF
+#    - name: Install dependencies on server
+#      run: |
+#        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+#          cd ${{ secrets.DEPLOY_DIR }}
+#          poetry install
+#        EOF
 
 #    steps:
 #      - name: Set up SSH
