@@ -55,12 +55,13 @@ jobs:
     - name: Sync project to server
       run: |
         rsync -avz --delete --exclude='.git' ./ ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_DIR }}
-#    - name: Install dependencies on server
-#      run: |
-#        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-#          cd ${{ secrets.DEPLOY_DIR }}
-#          poetry install
-#        EOF
+    - name: Install dependencies on server
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          cd ${{ secrets.DEPLOY_DIR }}
+          pip install poetry
+          poetry install
+        EOF
 
 #    steps:
 #      - name: Set up SSH
