@@ -51,7 +51,7 @@ jobs:
       - name: Install dependencies on server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-          cd ~/home/alex/myapp/drf_project/drf_project
+          cd /home/alex/myapp/drf_project/drf_project
           git pull
           docker-compose down
           docker-compose up -d --build
