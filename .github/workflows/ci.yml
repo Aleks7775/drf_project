@@ -57,7 +57,7 @@ jobs:
           sudo apt install curl
           curl -sSL https://install.python-poetry.org | python3 -
           poetry install 
-          WOF   
+          EOF   
 
 #      - name: Sync project to server
 #        run: |
