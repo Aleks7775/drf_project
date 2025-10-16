@@ -31,28 +31,44 @@ jobs:
         PORT: ${{ secrets.PORT }}
       run: |
         python manage.py test
-  deploy:
+
+  build:
     runs-on: ubuntu-latest
-    needs: test
 
     steps:
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_KEY }}
+      - name: Check out code
+        uses: actions/checkout@v3
 
-      - name: Copy project files to server
+      - name: Log in to Docker Hub
+        run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+
+      - name: Build and push Docker images
         run: |
-          ssh -o StrictHostKeyChecking=no -vT ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-          cd ${{ secrets.DEPLOY_DIR }}
-          sudo apt-get update
-          sudo apt-get install -y python3-venv python3-pip
-          EOF
-      - name: Install dependencies on server
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            cd /home/alex/myapp/drf_project/drf_project
-            git pull
-            docker-compose down
-            docker-compose up -d --build 
-          EOF
+          docker compose build
+          docker compose push
+
+#  deploy:
+#    runs-on: ubuntu-latest
+#    needs: test
+#
+#    steps:
+#      - name: Set up SSH
+#        uses: webfactory/ssh-agent@v0.9.0
+#        with:
+#          ssh-private-key: ${{ secrets.SSH_KEY }}
+#
+#      - name: Copy project files to server
+#        run: |
+#          ssh -o StrictHostKeyChecking=no -vT ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+#          cd ${{ secrets.DEPLOY_DIR }}
+#          sudo apt-get update
+#          sudo apt-get install -y python3-venv python3-pip
+#          EOF
+#      - name: Install dependencies on server
+#        run: |
+#          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+#            cd /home/alex/myapp/drf_project/drf_project
+#            git pull
+#            docker-compose down
+#            docker-compose up -d --build
+#          EOF
