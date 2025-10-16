@@ -1,4 +1,4 @@
-version: '3,9'
+version: '3.9'
 
 services:
   web:
@@ -12,6 +12,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    env_file:
+      - .env
 
   db:
     image: postgres:17
@@ -71,4 +73,3 @@ volumes:
   postgres_data:
   redis_data:
   static_volume:
-
